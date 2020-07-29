@@ -25,20 +25,21 @@ SECRET_KEY = 'pym^t#yf4l_-$_1uz4q8a8+-^ggzr-5srpae)c8_nw^o9h%m)n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'django_cassandra_engine',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'graphene_django',
-    'drf-yasg',
+    'rest_framework',
+    'drf_yasg',
     'movie',
     'planet',
     'character'
@@ -80,13 +81,31 @@ WSGI_APPLICATION = 'graphStartWars.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django_cassandra_engine',
+        'NAME': 'star_wars',
+        'TEST_NAME': 'test_db',
+        'HOST': '3.235.131.116',
+        'OPTIONS': {
+            'replication': {
+                'strategy_class': 'SimpleStrategy', 'replication_factor': 1
+            }
+        },
     }
 }
 
-GRAPHENE = {
- 'SCHEMA': 'character.schema'
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+    ],
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ],
+    'EXCEPTION_HANDLER': 'polaris.common.exception_handler.custom_exception_handler',
+    'DEFAULT_PAGINATION_CLASS': 'polaris.common.paginators.CustomPagination',
+    'PAGE_SIZE': 100
 }
 
 # Password validation
