@@ -1,0 +1,2 @@
+class CharacterViewSet():
+    pass

@@ -1,0 +1,2 @@
+class PlanetViewSet():
+    pass
